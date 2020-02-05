@@ -62,11 +62,26 @@ class Recipient {
         if (!(await shema.isValid(req.body)))
             return res.status(400).json({ error: 'Validation fails' });
 
-        const recipient = await RecipientModel.update(req.body, {
-            where: req.params.id,
-        });
+        const recipient = await RecipientModel.findByPk(req.params.id);
+        const {
+            name,
+            street,
+            number,
+            state,
+            city,
+            cep,
+            complements,
+        } = await recipient.update(req.body);
 
-        return res.json(recipient);
+        return res.json({
+            name,
+            street,
+            number,
+            state,
+            city,
+            cep,
+            complements,
+        });
     }
     async delete(req, res) {
         const recipient = await RecipientModel.findByPk(req.params.id);
@@ -74,7 +89,7 @@ class Recipient {
         if (!recipient)
             return res.status(401).json({ error: 'Recipient not found' });
 
-        await RecipientModel.destroy(req.params.id);
+        await recipient.destroy(req.params.id);
 
         return res.json({ status: 'Recipient delete with success' });
     }
