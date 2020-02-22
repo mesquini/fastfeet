@@ -15,9 +15,14 @@
 
 This project was developed to studying JSON and React with the following technologies:
 
+-  [Yarn][yarn]
 -  [Axios](https://github.com/axios/axios)
 -  [Nodemon](https://github.com/remy/nodemon)
+-  [multer](https://github.com/expressjs/multer)
 -  [Sucrase](https://github.com/alangpierce/sucrase)
+-  [yup](https://github.com/jquense/yup)
+-  [sequelize](https://github.com/sequelize/sequelize)
+-  [Insomnia](https://insomnia.rest/download/)
 -  [VS Code][vc]
 
  ## :information_source: How To Use
