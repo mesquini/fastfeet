@@ -20,7 +20,7 @@ class Index {
     middlewares() {
         this.server.use(express.json());
         this.server.use(
-            '/deliveryman/:id/avatar',
+            '/files',
             express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
           );
     }
