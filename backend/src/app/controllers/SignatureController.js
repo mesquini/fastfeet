@@ -9,7 +9,10 @@ class SignatureController {
 
         const signature = await Signature.create({ name, path });
 
-        await delivery.update({ signature_id: signature.id });
+        await delivery.update({
+            signature_id: signature.id,
+            end_date: new Date(),
+        });
 
         return res.json(signature);
     }
