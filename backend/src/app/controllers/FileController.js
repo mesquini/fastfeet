@@ -23,16 +23,6 @@ class FileController {
     async delete(req, res) {
         const file = await File.findByPk(req.params.id);
 
-        const deliveryman = await Deliveryman.findOne({
-            where: { avatar_id: file.id },
-        });
-
-        if (deliveryman) {
-            await file.destroy();
-            await deliveryman.update({ avatar_id: 0 });
-            return res.json({ ok: 'Image removed' });
-        }
-
         await file.destroy();
 
         return res.json({ ok: 'Image removed' });

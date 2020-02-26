@@ -3,7 +3,13 @@
 </h1>
 <br />
 
-<p>Esse desafio faz parte do Desafio Final, que é uma aplicação completa (Back-end, Front-end e Mobile) do Bootcamp GoStack 10</p>
+<strong>The application under development is an app for a fictional shipping company, FastFeet</strong><br />
+
+<h3 align="center">
+  :construction: In construction :construction:
+</h3>
+
+<p>This challenge is part of the Final Challenge, which is a complete application (Back-end, Front-end and Mobile) of [Bootcamp GoStack 10](https://rocketseat.com.br/bootcamp)</p>
 
 <p align="center">
   <a href="#rocket-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -15,15 +21,31 @@
 
 This project was developed to studying JSON and React with the following technologies:
 
--  [Yarn][yarn]
--  [Axios](https://github.com/axios/axios)
--  [Nodemon](https://github.com/remy/nodemon)
--  [multer](https://github.com/expressjs/multer)
+-  [Node.js](https://nodejs.org/en/)
+-  [Express](https://expressjs.com/)
+-  [nodemon](https://nodemon.io/)
 -  [Sucrase](https://github.com/alangpierce/sucrase)
--  [yup](https://github.com/jquense/yup)
--  [sequelize](https://github.com/sequelize/sequelize)
--  [Insomnia](https://insomnia.rest/download/)
--  [VS Code][vc]
+-  [Docker](https://www.docker.com/docker-community)
+-  [Sequelize](http://docs.sequelizejs.com/)
+-  [PostgreSQL](https://www.postgresql.org/)
+-  [node-postgres](https://www.npmjs.com/package/pg)
+-  [Redis](https://redis.io/)
+-  [MongoDB](https://www.mongodb.com/)
+-  [Mongoose](https://mongoosejs.com/)
+-  [JWT](https://jwt.io/)
+-  [Multer](https://github.com/expressjs/multer)
+-  [Bcrypt](https://www.npmjs.com/package/bcrypt)
+-  [Youch](https://www.npmjs.com/package/youch)
+-  [Yup](https://www.npmjs.com/package/yup)
+-  [Bee Queue](https://www.npmjs.com/package/bcrypt)
+-  [Nodemailer](https://nodemailer.com/about/)
+-  [date-fns](https://date-fns.org/)
+-  [Sentry](https://sentry.io/)
+-  [DotEnv](https://www.npmjs.com/package/dotenv)
+-  [ESLint](https://eslint.org/)
+-  [Visual Studio Code](https://code.visualstudio.com/)
+-  [Insomnia](https://insomnia.rest/)
+-  [Mailtrap](https://mailtrap.io/)
 
  ## :information_source: How To Use
  
