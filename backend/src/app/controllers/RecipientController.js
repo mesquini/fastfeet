@@ -3,8 +3,8 @@ import RecipientModel from '../models/Recipient';
 
 class Recipient {
     async index(req, res) {
-        if (req.body.id) {
-            const recipient = await RecipientModel.findByPk(req.body.id);
+        if (req.params.id) {
+            const recipient = await RecipientModel.findByPk(req.params.id);
             if (!recipient)
                 return res.status(404).json({ error: 'Recipient not found' });
 
