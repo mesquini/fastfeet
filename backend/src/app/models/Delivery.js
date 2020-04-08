@@ -5,9 +5,18 @@ class Delivery extends Model {
         super.init(
             {
                 product: Sequelize.STRING,
-                canceled_at: Sequelize.DATE,
-                start_date: Sequelize.DATE,
-                end_date: Sequelize.DATE,
+                canceled_at: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                },
+                start_date: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                },
+                end_date: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                },
             },
             {
                 sequelize,

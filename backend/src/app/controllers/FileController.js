@@ -10,13 +10,6 @@ class FileController {
             path,
         });
 
-        await Deliveryman.update(
-            { avatar_id: file.id },
-            {
-                where: { id: req.params.id },
-            }
-        );
-
         return res.json(file);
     }
 

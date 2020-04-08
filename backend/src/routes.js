@@ -9,6 +9,7 @@ import DeliverymanController from './app/controllers/DeliverymanController';
 import FileController from './app/controllers/FileController';
 import SignatureController from './app/controllers/SignatureController';
 import DeliveryController from './app/controllers/DeliveryController';
+import DeliverymanDeliveryController from './app/controllers/DeliverymanDeliveryController';
 import DeliveryProblemController from './app/controllers/DeliveryProblemController';
 
 import authMiddleware from './app/middlewares/auth';
@@ -30,17 +31,25 @@ routes.post('/recipient', RecipientController.store);
 routes.put('/recipient/:id', RecipientController.update);
 routes.delete('/recipient/:id', RecipientController.delete);
 
+//retorna o entregador com as encomendas que não estejam entregues ou canceladas
+routes.get('/deliveryman/:id', DeliverymanDeliveryController.index);
+//retorna o entregador com as encomendas que já foram entregues por ele
+routes.get(
+    '/deliveryman/:id/deliveries',
+    DeliverymanDeliveryController.deliveries
+);
+
 //retorna todos os entregadores com o avatar
 routes.get('/deliverymanes', DeliverymanController.index);
-//retorna o entregador com as encomendas que não estejam entregues ou canceladas
-routes.get('/deliveryman/:id', DeliverymanController.index);
-//retorna o entregador com as encomendas que já foram entregues por ele
-routes.get('/deliveryman/:id/deliveries', DeliverymanController.index);
 routes.post('/deliveryman', DeliverymanController.store);
 routes.put('/deliveryman/:id', DeliverymanController.update);
 routes.delete('/deliveryman/:id', DeliverymanController.delete);
 
-routes.post('/deliveryman/:id/avatar', upload.single('file'), FileController.store);
+routes.post(
+    '/deliveryman/:id/avatar',
+    upload.single('file'),
+    FileController.store
+);
 routes.delete('/avatar/:id', FileController.delete);
 
 routes.get('/deliveries', DeliveryController.index);
@@ -48,7 +57,11 @@ routes.post('/delivery', DeliveryController.store);
 routes.put('/delivery/:id', DeliveryController.update);
 routes.delete('/delivery/:id', DeliveryController.delete);
 
-routes.post('/delivery/:id/signature', upload.single('file'), SignatureController.store);
+routes.post(
+    '/delivery/:id/signature',
+    upload.single('file'),
+    SignatureController.store
+);
 
 routes.get('/deliveries/problems', DeliveryProblemController.show);
 routes.get('/delivery/:id/problems', DeliveryProblemController.index);

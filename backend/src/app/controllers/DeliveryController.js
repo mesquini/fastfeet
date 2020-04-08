@@ -14,15 +14,24 @@ import {
     setHours,
 } from 'date-fns';
 import { Op } from 'sequelize';
-import * as Yup from 'Yup';
+import * as Yup from 'yup';
 
 class DeliveryController {
     async index(req, res) {
-        const { page = 1 } = req.query;
+        const { page = 1, q = '' } = req.query;
+
+        const count = await Delivery.count();
 
         const delivery = await Delivery.findAll({
-            attributes: ['id','product', 'start_date', 'end_date', 'canceled_at'],
+            attributes: [
+                'id',
+                'product',
+                'start_date',
+                'end_date',
+                'canceled_at',
+            ],
             order: ['id'],
+            where: { product: { [Op.iLike]: `${q}%` } },
             include: [
                 {
                     model: Deliveryman,
@@ -46,6 +55,8 @@ class DeliveryController {
             limit: 10,
             offset: (page - 1) * 10,
         });
+
+        res.header('X-Total-Count', count);
 
         return res.json(delivery);
     }

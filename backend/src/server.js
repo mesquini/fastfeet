@@ -1,3 +1,5 @@
-import app from "./index";
+import app from './index';
 
-app.listen(3333);
+const port = process.env.PORT ? process.env.PORT : 3333;
+
+app.listen(port, () => console.log(`listing port ${port}`));

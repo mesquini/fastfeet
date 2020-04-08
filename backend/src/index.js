@@ -3,6 +3,9 @@ import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import Youch from 'youch';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
 import * as Sentry from '@sentry/node';
 import sentryConfig from './config/sentry';
 import 'express-async-errors';
@@ -24,6 +27,9 @@ class Index {
     middlewares() {
         this.server.use(Sentry.Handlers.requestHandler());
         this.server.use(express.json());
+        this.server.use(morgan('dev'));
+        this.server.use(cors());
+        this.server.use(helmet());
         this.server.use(
             '/files',
             express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))

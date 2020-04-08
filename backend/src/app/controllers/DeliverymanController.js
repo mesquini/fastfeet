@@ -1,64 +1,16 @@
 import Deliveryman from '../models/Deliveryman';
-import Delivery from '../models/Delivery';
 import File from '../models/File';
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 
 class DeliverymanController {
     async index(req, res) {
-        const { page = 1 } = req.query;
+        const { page = 1, q = '' } = req.query;
 
-        if (req.params.id) {
-            const {
-                id: deliveryman_id,
-                name,
-                email,
-                avatar,
-            } = await Deliveryman.findByPk(req.params.id, {
-                attributes: ['id', 'name', 'email'],
-                include: [
-                    {
-                        model: File,
-                        as: 'avatar',
-                        attributes: ['name', 'url', 'path'],
-                    },
-                ],
-            });
-
-            const deliveries = await Delivery.findAll({
-                attributes: [
-                    'id',
-                    'product',
-                    'start_date',
-                    'end_date',
-                    'canceled_at',
-                ],
-                order: ['id'],
-                where: {
-                    canceled_at: null,
-                    deliveryman_id,
-                },
-            });
-
-            if (req.path.includes('deliveries')) {
-                const deliveries_finished = deliveries.filter(
-                    d => d.end_date !== null
-                );
-                return res.json({
-                    deliveryman: { name, email, avatar, deliveries_finished },
-                });
-            }
-
-            const deliveries_available = deliveries.filter(
-                d => d.end_date === null
-            );
-
-            return res.json({
-                deliveryman: { name, email, avatar, deliveries_available },
-            });
-        }
         const deliverymans = await Deliveryman.findAll({
             attributes: ['id', 'name', 'email'],
             order: ['id'],
+            where: { name: { [Op.iLike]: `${q}%` } },
             include: [
                 {
                     model: File,

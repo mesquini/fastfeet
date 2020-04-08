@@ -34,9 +34,9 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            canceled_at: { type: Sequelize.DATE },
-            start_date: { type: Sequelize.DATE, allowNull: false },
-            end_date: { type: Sequelize.DATE },
+            canceled_at: { type: Sequelize.DATE, allowNull: true },
+            start_date: { type: Sequelize.DATE, allowNull: true },
+            end_date: { type: Sequelize.DATE, allowNull: true },
             created_at: { type: Sequelize.DATE, allowNull: false },
             updated_at: { type: Sequelize.DATE, allowNull: false },
         });

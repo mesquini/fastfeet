@@ -1,5 +1,6 @@
 import * as Yup from 'Yup';
 import RecipientModel from '../models/Recipient';
+import { Op } from 'sequelize';
 
 class Recipient {
     async index(req, res) {
@@ -10,13 +11,15 @@ class Recipient {
 
             return res.json(recipient);
         } else {
-            const { page = 1 } = req.query;
+            const { page = 1, q = '' } = req.query;
 
             const recipients = await RecipientModel.findAll({
                 order: ['id'],
+                where: { street: { [Op.iLike]: `${q}%` } },
                 limit: 10,
                 offset: (page - 1) * 10,
             });
+
             return res.json(recipients);
         }
     }
@@ -34,25 +37,9 @@ class Recipient {
         if (!(await shema.isValid(req.body)))
             return res.status(400).json({ error: 'Validation fails' });
 
-        const {
-            name,
-            street,
-            number,
-            state,
-            city,
-            cep,
-            complements,
-        } = await RecipientModel.create(req.body);
+        const recipient = await RecipientModel.create(req.body);
 
-        return res.json({
-            name,
-            street,
-            number,
-            state,
-            city,
-            cep,
-            complements,
-        });
+        return res.json(recipient);
     }
     async update(req, res) {
         const shema = Yup.object().shape({
