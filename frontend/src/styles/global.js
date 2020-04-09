@@ -21,10 +21,10 @@ export default createGlobalStyle`
   }
 
   body {
-    -webkit-font-smoothing: antialiased;
-    background: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
     transition: all 0.25s linear;
+    -webkit-font-smoothing: antialiased;
   }
 
   body, input, button {
