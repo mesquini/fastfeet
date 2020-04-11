@@ -15,6 +15,7 @@ import {
 } from 'date-fns';
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
+import File from '../models/File';
 
 class DeliveryController {
     async index(req, res) {
@@ -37,6 +38,13 @@ class DeliveryController {
                     model: Deliveryman,
                     as: 'deliveryman',
                     attributes: ['name', 'email'],
+                    include: [
+                        {
+                            model: File,
+                            as: 'avatar',
+                            attributes: ['name', 'url', 'path'],
+                        },
+                    ],
                 },
                 {
                     model: Recipient,

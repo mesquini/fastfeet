@@ -6,6 +6,8 @@ export const lightTheme = {
   power: '#E8E8E8',
   powerSvg: '#fff',
   body: '#eee',
+  textHeader: 'rgba(0, 0, 0, 0.5)',
+  active: '#000',
 };
 
 export const darkTheme = {
@@ -15,5 +17,7 @@ export const darkTheme = {
   gradient: 'linear-gradient(#123286, #1e205D)',
   power: '#404144',
   powerSvg: '#e02041',
+  textHeader: 'rgba(255, 255, 255, 0.5)',
   body: 'rgba(0, 0, 0, 0.8)',
+  active: '#fff',
 };

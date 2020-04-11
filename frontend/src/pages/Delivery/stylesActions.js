@@ -36,9 +36,9 @@ export const Badge = styled.button`
 export const Options = styled.div`
   position: absolute;
   width: 125px;
-  left: calc(100% - 70px);
-  top: calc(100% + 10px);
-  background: rgba(0, 0, 0, 1);
+  left: calc(100% - 75px);
+  top: calc(50% + 12px);
+  background: ${({ theme }) => theme.power};
   border-radius: 4px;
   padding: 20px 5px;
   display: ${props => (props.visible ? 'block' : 'none')};
@@ -46,20 +46,23 @@ export const Options = styled.div`
   &::before {
     content: '';
     position: absolute;
-    left: calc(50% - 20px);
-    top: -20px;
+    left: calc(50% - 8px);
+    top: -10px;
     height: 0;
     width: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-bottom: 20px solid rgba(0, 0, 0, 1);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid ${({ theme }) => theme.power};
   }
+
   a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     padding: 0 15px;
-    line-height: 18px;
-    max-height: 260px;
-    color: rgba(255, 255, 255, 1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    line-height: 24px;
+    color: ${({ theme }) => theme.text};
+    border-bottom: 1px solid ${({ theme }) => theme.text};
 
     svg {
       margin-right: 8px;

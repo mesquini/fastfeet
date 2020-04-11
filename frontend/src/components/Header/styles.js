@@ -3,7 +3,7 @@ import { lighten } from 'polished';
 
 export const Container = styled.div`
   background: ${({ theme }) => theme.background};
-  padding: 0 30px;
+  padding: 0 20px;
 `;
 
 export const Content = styled.div`
@@ -29,6 +29,7 @@ export const Content = styled.div`
     a {
       font-weight: bold;
       margin-right: 15px;
+      color: ${({ theme }) => theme.textHeader};
 
       &:hover {
         color: ${lighten(0.1, '#7159c1')};
@@ -38,24 +39,18 @@ export const Content = styled.div`
 
   aside {
     display: flex;
-    justify-items: flex-end;
+    /* justify-items: flex-end; */
 
     div {
-      text-align: right;
-      margin-right: 10px;
-
-      strong {
-        display: block;
-        color: ${({ theme }) => theme};
+      p {
         margin-bottom: 5px;
+        color: ${({ theme }) => theme.text};
+        font-weight: bold;
       }
 
       button {
         border: 0;
         background: none;
-        display: block;
-        margin-top: 2px;
-        font-size: 14px;
         color: red;
         transition: color 0.2s ease;
 
@@ -74,7 +69,7 @@ export const ToggleContainer = styled.button`
   background: ${({ theme }) => theme.gradient};
   width: 5rem;
   height: 2.5rem;
-  /* margin: 0 auto; */
+  margin: 0 auto;
   border-radius: 30px;
   border: 2px solid ${({ theme }) => theme.toggleBorder};
   font-size: 0.5rem;

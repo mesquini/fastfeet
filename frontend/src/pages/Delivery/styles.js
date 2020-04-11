@@ -6,7 +6,7 @@ function value(status, font) {
     case 'Entregue':
       return font ? '#1F733C' : lighten(0.3, '#1F733C');
     case 'Pendente':
-      return font ? '#F2CB05' : lighten(0.3, '#F2CB05');
+      return font ? '#F2A413' : lighten(0.3, '#F2A413');
     case 'Retirada':
       return font ? '#239EFF' : lighten(0.3, '#239EFF');
     case 'Cancelado':
@@ -36,11 +36,18 @@ export const Content = styled.div`
 
     ul {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: 80px repeat(7, 1fr);
       margin: 20px;
       padding: 20px;
       border-radius: 6px;
       background: ${({ theme }) => theme.background};
+
+      .deliveryman {
+        display: flex;
+        div {
+          margin-top: -4px;
+        }
+      }
 
       .action {
         display: flex;
@@ -52,13 +59,14 @@ export const Content = styled.div`
 
 export const Status = styled.li`
   display: flex;
-  width: 65%;
   padding: 5px;
   border-radius: 25px;
   background: ${props => value(props.status, false)};
   color: ${props => value(props.status, true)};
   font-weight: bold;
   font-size: 14px;
+  text-align: center;
+  justify-content: center;
 
   svg {
     margin-right: 5px;
@@ -67,14 +75,28 @@ export const Status = styled.li`
 `;
 
 export const Buttons = styled.div`
-  margin-top: 25px;
+  margin-top: 35px;
   display: flex;
   justify-content: space-between;
 
-  input {
-    border-radius: 2px;
-    padding: 5px;
-    border: 0;
+  div {
+    position: relative;
+    padding: 0 0 0 20px;
+    margin: 0 20px;
+
+    input {
+      height: 20px;
+      border-radius: 4px;
+      padding: 15px;
+      border: 1px solid #fff;
+      padding-left: 30px;
+    }
+    svg {
+      position: absolute;
+      bottom: 10px;
+      left: 25px;
+      color: rgba(0, 0, 0, 0.5);
+    }
   }
 
   a {

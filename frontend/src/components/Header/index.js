@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import logo from '~/assets/logo.png';
 import { ReactComponent as Sun } from '~/assets/sun.svg';
@@ -13,11 +13,11 @@ import { darkMode } from '~/store/modules/theme/actions';
 
 export default function Header() {
   const dispatch = useDispatch();
-  const theme = useSelector(state => state.theme.theme);
-  const isLight = theme === 'light';
+  const theme = useSelector(state => state.theme);
+  const isLight = theme.theme === 'light';
 
   function changeTheme() {
-    const themeChange = theme === 'light' ? 'dark' : 'light';
+    const themeChange = theme.theme === 'light' ? 'dark' : 'light';
     const toggleTheme = themeChange === 'light' ? lightTheme : darkTheme;
 
     dispatch(darkMode(themeChange, toggleTheme));
@@ -28,10 +28,30 @@ export default function Header() {
       <Content>
         <nav>
           <img src={logo} alt="logo" />
-          <Link to="/delivery">EMCOMENDAS</Link>
-          <Link to="/deliveryman">ENTREGADORES</Link>
-          <Link to="/recipient">DESTINATÁRIOS</Link>
-          <Link to="/delivery-problem">PROBLEMAS</Link>
+          <NavLink
+            to="/delivery"
+            activeStyle={{ color: theme.toggleTheme.active }}
+          >
+            EMCOMENDAS
+          </NavLink>
+          <NavLink
+            activeStyle={{ color: theme.toggleTheme.active }}
+            to="/deliveryman"
+          >
+            ENTREGADORES
+          </NavLink>
+          <NavLink
+            activeStyle={{ color: theme.toggleTheme.active }}
+            to="/recipient"
+          >
+            DESTINATÁRIOS
+          </NavLink>
+          <NavLink
+            activeStyle={{ color: theme.toggleTheme.active }}
+            to="/delivery-problem"
+          >
+            PROBLEMAS
+          </NavLink>
         </nav>
         <aside>
           <ToggleContainer lightTheme={isLight} onClick={changeTheme}>
@@ -39,8 +59,8 @@ export default function Header() {
             <Moon />
           </ToggleContainer>
           <div>
-            <strong>Admin FastFeet</strong>
-            <button type="button">sair do sistema</button>
+            <p>Admin FastFeet</p>
+            <button type="button">Sair do sistema</button>
           </div>
         </aside>
       </Content>
