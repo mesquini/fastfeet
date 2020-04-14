@@ -4,6 +4,7 @@ import multer from 'multer';
 import multerConfig from './config/multer';
 
 import SessionController from './app/controllers/SessionController';
+import DeliveryRecipientController from './app/controllers/DeliveryRecipientController';
 import RecipientController from './app/controllers/RecipientController';
 import DeliverymanController from './app/controllers/DeliverymanController';
 import FileController from './app/controllers/FileController';
@@ -30,6 +31,8 @@ routes.get('/recipient/:id', RecipientController.index);
 routes.post('/recipient', RecipientController.store);
 routes.put('/recipient/:id', RecipientController.update);
 routes.delete('/recipient/:id', RecipientController.delete);
+
+routes.get('/recipient-delivery/:id', DeliveryRecipientController.index);
 
 //retorna o entregador com as encomendas que não estejam entregues ou canceladas
 routes.get('/deliveryman/:id', DeliverymanDeliveryController.index);

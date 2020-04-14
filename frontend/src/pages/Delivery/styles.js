@@ -111,3 +111,21 @@ export const Buttons = styled.div`
     }
   }
 `;
+
+export const Empty = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 15%;
+
+  strong {
+    font-size: 24px;
+  }
+`;
+
+export const Loading = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10%;
+`;

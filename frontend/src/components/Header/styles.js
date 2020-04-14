@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { lighten } from 'polished';
 
 export const Container = styled.div`
+  width: 100%;
   background: ${({ theme }) => theme.background};
   padding: 0 20px;
 `;

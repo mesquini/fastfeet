@@ -3,21 +3,25 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaSistrix } from 'react-icons/fa';
 import { GiPlainCircle } from 'react-icons/gi';
+import { ClapSpinner } from 'react-spinners-kit';
+
 import Avatar from '~/components/Avatar';
 
 import api from '~/services/api';
 
 import Actions from './actions';
-import { Container, Content, Buttons, Status } from './styles';
+import { Container, Content, Buttons, Status, Empty, Loading } from './styles';
 
 export default function Delivery() {
   const token = useSelector(state => state.auth.token);
 
   const [delivery, setDelivery] = useState([]);
   const [q, setQ] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function loadDelivery() {
+      setLoading(true);
       const { data } = await api.get('/deliveries', {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -39,16 +43,18 @@ export default function Delivery() {
     });
 
     setDelivery(newArr);
+    setLoading(false);
   }
 
   const filteredDelivery = useMemo(
-    () => (q ? delivery.filter(d => d.product.indexOf(q) > -1) : delivery),
+    () =>
+      q
+        ? delivery.filter(
+            d => d.product.toLowerCase().indexOf(q.toLowerCase()) > -1
+          )
+        : delivery,
     [q, delivery]
   );
-
-  function handleChange(e) {
-    setQ(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
-  }
 
   return (
     <Container>
@@ -60,50 +66,68 @@ export default function Delivery() {
             <input
               type="text"
               value={q}
-              onChange={handleChange}
-              placeholder="Buscar pro encomendas"
+              onChange={e => setQ(e.target.value)}
+              placeholder="Buscar por encomendas"
             />
           </div>
           <Link to="/delivery-new">+ CADASTRAR</Link>
         </Buttons>
-        {delivery.length > 0 ? (
-          <div>
-            <ul className="header">
-              <li>ID</li>
-              <li>PRODUTO</li>
-              <li>DESTINATÁRIO</li>
-              <li>ENTREGADOR</li>
-              <li style={{ marginLeft: 'inherit' }}>CIDADE</li>
-              <li>ESTADO</li>
-              <li style={{ marginLeft: 'inherit' }}>STATUS</li>
-              <li className="action">AÇÕES</li>
-            </ul>
-            {filteredDelivery.map(d => (
-              <div key={d.id}>
-                <ul>
-                  <li>#{d.id}</li>
-                  <li>{d.product}</li>
-                  <li>{d.recipient.name}</li>
-                  <li className="deliveryman">
-                    <Avatar deliveryman={d.deliveryman} />
-                    {d.deliveryman.name}
-                  </li>
-                  <li style={{ marginLeft: 'inherit' }}>{d.recipient.city}</li>
-                  <li style={{ marginLeft: 'inherit' }}>{d.recipient.state}</li>
-                  <Status status={d.status}>
-                    <GiPlainCircle size={12} />
-                    {d.status.toUpperCase()}
-                  </Status>
-                  <li className="action">
-                    <Actions />
-                  </li>
+        {!loading && (
+          <>
+            {delivery.length > 0 ? (
+              <div>
+                <ul className="header">
+                  <li>ID</li>
+                  <li>PRODUTO</li>
+                  <li>DESTINATÁRIO</li>
+                  <li>ENTREGADOR</li>
+                  <li style={{ marginLeft: 'inherit' }}>CIDADE</li>
+                  <li>ESTADO</li>
+                  <li style={{ marginLeft: 'inherit' }}>STATUS</li>
+                  <li className="action">AÇÕES</li>
                 </ul>
+                {filteredDelivery.map(d => (
+                  <div key={d.id}>
+                    <ul>
+                      <li>#{d.id}</li>
+                      <li>{d.product}</li>
+                      <li>{d.recipient.name}</li>
+                      <li className="deliveryman">
+                        <Avatar deliveryman={d.deliveryman} />
+                        {d.deliveryman.name}
+                      </li>
+                      <li style={{ marginLeft: 'inherit' }}>
+                        {d.recipient.city}
+                      </li>
+                      <li style={{ marginLeft: 'inherit' }}>
+                        {d.recipient.state}
+                      </li>
+                      <Status status={d.status}>
+                        <GiPlainCircle size={12} />
+                        {d.status.toUpperCase()}
+                      </Status>
+                      <li className="action">
+                        <Actions />
+                      </li>
+                    </ul>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        ) : (
-          <strong>vazio</strong>
+            ) : (
+              <Empty>
+                <strong>Você não possuí nenhuma emcomenda cadastrada!</strong>
+              </Empty>
+            )}
+          </>
         )}
+        <Loading>
+          <ClapSpinner
+            loading={loading}
+            size={45}
+            frontColor="#7159c1"
+            backColor="#686769"
+          />
+        </Loading>
       </Content>
     </Container>
   );

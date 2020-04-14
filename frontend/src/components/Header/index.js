@@ -42,7 +42,7 @@ export default function Header() {
           </NavLink>
           <NavLink
             activeStyle={{ color: theme.toggleTheme.active }}
-            to="/recipient"
+            to="/recipients"
           >
             DESTINATÁRIOS
           </NavLink>

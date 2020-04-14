@@ -51,4 +51,10 @@ export default createGlobalStyle`
     cursor: pointer;
   }
 
+  .form {
+    background: ${({ theme }) => theme.background};
+    border-radius: 6px;
+    padding: 25px;
+    margin-top: 25px;
+  }
 `;
