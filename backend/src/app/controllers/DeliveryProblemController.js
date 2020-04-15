@@ -55,30 +55,37 @@ class DeliveryProblemController {
     }
     async delete(req, res) {
         const deliveryProblem = await DeliveryProblem.findByPk(req.params.id, {
-            attributes: ['id','description'],
+            attributes: ['id', 'description'],
             include: [
                 {
                     model: Delivery,
                     as: 'delivery',
                     attributes: ['id', 'product'],
-                    include: [{
-                        model: Deliveryman,
-                        as: 'deliveryman',
-                        attributes: ['id', 'name', 'email']
-                    }],
+                    include: [
+                        {
+                            model: Deliveryman,
+                            as: 'deliveryman',
+                            attributes: ['id', 'name', 'email'],
+                        },
+                    ],
                 },
             ],
         });
 
         if (!deliveryProblem)
-            return res.status(404).json({ error: 'Delivery problem not found' });
+            return res
+                .status(404)
+                .json({ error: 'Delivery problem not found' });
 
         const delivery = await Delivery.findByPk(deliveryProblem.delivery.id);
 
-        if(!delivery)
-            return res.status(400).json({ error: 'Delivery not found' })
+        if (!delivery)
+            return res.status(400).json({ error: 'Delivery not found' });
 
-        delivery.canceled_at = parseISO(req.body.canceled_at);
+        let cancelDate = !!req.body.canceled_at
+            ? req.body.canceled_at
+            : new Date();
+        delivery.canceled_at = parseISO(cancelDate);
 
         await delivery.save();
 

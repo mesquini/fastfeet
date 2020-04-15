@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { FaEllipsisH } from 'react-icons/fa';
-import { MdEdit, MdDeleteForever, MdVisibility } from 'react-icons/md';
-
-import { Link } from 'react-router-dom';
+import { MdDeleteForever, MdVisibility } from 'react-icons/md';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Modal, Backdrop, Fade } from '@material-ui/core';
@@ -16,9 +14,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Actions({ idDelivery, onDelete }) {
+export default function Actions({ description, onCancel }) {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
+  const [problem, setProblem] = useState('');
 
   const classes = useStyles();
 
@@ -28,6 +27,16 @@ export default function Actions({ idDelivery, onDelete }) {
 
   const handleOpen = () => {
     setOpen(true);
+  };
+
+  const handleOpenDetails = () => {
+    if (description) setProblem(description);
+    handleOpen();
+  };
+
+  const handleOpenCancel = () => {
+    if (description) setProblem('');
+    handleOpen();
   };
 
   const handleClose = () => {
@@ -41,17 +50,13 @@ export default function Actions({ idDelivery, onDelete }) {
         <FaEllipsisH size={20} color="#7156c1" />
       </Badge>
       <Options visible={visible}>
-        <Link to="">
+        <button type="button" onClick={handleOpenDetails}>
           <MdVisibility color="#7156c1" size={16} />
           Vizualizar
-        </Link>
-        <Link to={`/delivery/${idDelivery}`}>
-          <MdEdit color="#0472D1" size={16} />
-          Editar
-        </Link>
-        <button type="button" onClick={handleOpen}>
+        </button>
+        <button type="button" onClick={handleOpenCancel}>
           <MdDeleteForever color="#FF0F29" size={16} />
-          Excluir
+          Cancelar encomenda
         </button>
         <Modal
           className={classes.modal}
@@ -67,18 +72,29 @@ export default function Actions({ idDelivery, onDelete }) {
         >
           <Fade in={open}>
             <ModalLayout>
-              <h2 id="transition-modal-title">Deseja excluir?</h2>
-              <p id="transition-modal-description">
-                Não será possível recuperar depois de ser deletado!
-              </p>
-              <div>
-                <button type="button" onClick={onDelete}>
-                  SIM
-                </button>
-                <button type="button" onClick={handleClose}>
-                  CANCELAR
-                </button>
-              </div>
+              {problem.length > 0 ? (
+                <>
+                  <h2 id="transition-modal-title">VIZUALIZAR PROBLEMA</h2>
+                  <p id="transition-modal-description">{problem}</p>
+                </>
+              ) : (
+                <>
+                  <h2 id="transition-modal-title">
+                    Deseja cancelar a encomenda?
+                  </h2>
+                  <p id="transition-modal-description">
+                    Não será possível alterar depois!
+                  </p>
+                  <div>
+                    <button type="button" onClick={onCancel}>
+                      SIM
+                    </button>
+                    <button type="button" onClick={handleClose}>
+                      CANCELAR
+                    </button>
+                  </div>
+                </>
+              )}
             </ModalLayout>
           </Fade>
         </Modal>

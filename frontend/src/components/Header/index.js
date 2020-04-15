@@ -29,7 +29,7 @@ export default function Header() {
         <nav>
           <img src={logo} alt="logo" />
           <NavLink
-            to="/delivery"
+            to="/deliveries"
             activeStyle={{ color: theme.toggleTheme.active }}
           >
             EMCOMENDAS

@@ -5,10 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { Modal, Backdrop, Fade } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import api from '~/services/api';
 
 import { Badge, Options, ModalLayout } from './styles';
-import { toast } from 'react-toastify';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -18,21 +16,23 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Actions(props) {
+export default function Actions({
+  idRecipient,
+  data,
+  onDelete,
+  onDeleteConfirm,
+}) {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState([]);
-  const { idRecipient, callbackParent } = props;
-
-  useEffect(() => {
-    return () => {
-      setData([]);
-      setVisible(false);
-      setOpen(false);
-    };
-  }, []);
+  const [recipientDeliveries, setRecipientDeliveries] = useState([]);
 
   const classes = useStyles();
+
+  useEffect(() => {
+    if (data) {
+      setRecipientDeliveries(data);
+    }
+  }, [data]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -45,35 +45,6 @@ export default function Actions(props) {
 
   function handleToggleVisible() {
     setVisible(!visible);
-  }
-
-  async function handleDelete() {
-    try {
-      if (data.length > 0) {
-        for (let i = 0; i < data.length; i++) {
-          const element = data[i];
-          await api.delete(`/delivery/${element.id}`);
-        }
-      } else if (data.length === 0) {
-        const deliveriesRecipient = await api.get(
-          `/recipient-delivery/${idRecipient}`
-        );
-
-        if (deliveriesRecipient.length > 0) {
-          setData(deliveriesRecipient.data);
-          return;
-        } else {
-          await api.delete(`/recipient/${idRecipient}`);
-          callbackParent(idRecipient);
-          handleClose();
-          toast.success('Destinatário deletado com sucesso!');
-        }
-      }
-    } catch (error) {
-      console.log(error);
-
-      toast.error('Não foi possivel deletar, tente novamente!');
-    }
   }
 
   return (
@@ -105,7 +76,7 @@ export default function Actions(props) {
         >
           <Fade in={open}>
             <ModalLayout>
-              {data.length === 0 ? (
+              {recipientDeliveries.length === 0 ? (
                 <>
                   <h2 id="transition-modal-title">Deseja excluir?</h2>
                   <p id="transition-modal-description">
@@ -113,7 +84,7 @@ export default function Actions(props) {
                   </p>
 
                   <div>
-                    <button type="button" onClick={handleDelete}>
+                    <button type="button" onClick={onDelete}>
                       SIM
                     </button>
                     <button type="button" onClick={handleClose}>
@@ -128,7 +99,7 @@ export default function Actions(props) {
                     Será deletado todo os produtos relacionados a esse
                     destinatário
                   </strong>
-                  {data.map(infos => (
+                  {recipientDeliveries.map(infos => (
                     <div
                       key={infos.id}
                       style={{
@@ -145,7 +116,7 @@ export default function Actions(props) {
                     </div>
                   ))}
                   <div>
-                    <button type="button" onClick={handleDelete}>
+                    <button type="button" onClick={onDeleteConfirm}>
                       OK, ESTOU CIENTE
                     </button>
                     <button type="button" onClick={handleClose}>

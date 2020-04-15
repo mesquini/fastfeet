@@ -1,6 +1,4 @@
-import * as Yup from 'Yup';
 import RecipientModel from '../models/Recipient';
-import { Op } from 'sequelize';
 import Delivery from '../models/Delivery';
 
 class DeliveryRecipient {

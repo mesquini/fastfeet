@@ -8,6 +8,7 @@ import { ClapSpinner } from 'react-spinners-kit';
 import Avatar from '~/components/Avatar';
 
 import api from '~/services/api';
+import { toast } from 'react-toastify';
 
 import Actions from './actions';
 import { Container, Content, Buttons, Status, Empty, Loading } from './styles';
@@ -56,6 +57,18 @@ export default function Delivery() {
     [q, delivery]
   );
 
+  async function onDeleteSuccess(value) {
+    try {
+      await api.delete(`/delivery/${value}`);
+      toast.success('Encomenda deletada com sucesso!');
+      const filterDelivery = delivery.filter(f => f.id !== value);
+      setDelivery(filterDelivery);
+    } catch (error) {
+      console.log(error);
+      toast.error('Erro ao deletar encomenda, tente novamente!');
+    }
+  }
+
   return (
     <Container>
       <Content>
@@ -70,7 +83,7 @@ export default function Delivery() {
               placeholder="Buscar por encomendas"
             />
           </div>
-          <Link to="/delivery-new">+ CADASTRAR</Link>
+          <Link to="/new-delivery">+ CADASTRAR</Link>
         </Buttons>
         {!loading && (
           <>
@@ -107,7 +120,10 @@ export default function Delivery() {
                         {d.status.toUpperCase()}
                       </Status>
                       <li className="action">
-                        <Actions />
+                        <Actions
+                          idDelivery={d.id}
+                          onDelete={() => onDeleteSuccess(d.id)}
+                        />
                       </li>
                     </ul>
                   </div>

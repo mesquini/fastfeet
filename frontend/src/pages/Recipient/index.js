@@ -9,38 +9,27 @@ import api from '~/services/api';
 import { Container, Content, Buttons, Empty, Loading } from './styles';
 import { useSelector } from 'react-redux';
 import Actions from './actions.js';
+import { toast } from 'react-toastify';
 
 export default function Recipient() {
   const token = useSelector(state => state.auth.token);
 
   const [recipient, setRecipient] = useState([]);
+  const [recipientDeliveries, setRecipientDeliveries] = useState([]);
   const [q, setQ] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    async function loadDelivery() {
-      setLoading(true);
-      const { data } = await api.get('/recipients');
-
-      setRecipient(data);
-      setLoading(false);
-    }
     loadDelivery();
-
-    return () => {
-      setLoading(false);
-      setRecipient([]);
-    };
   }, [token]);
 
-  useEffect(() => {
-    return () => {
-      console.log('cleaned up2123');
-      setLoading(false);
-      setRecipient([]);
-      setQ('');
-    };
-  }, []);
+  async function loadDelivery() {
+    setLoading(true);
+    const { data } = await api.get('/recipients');
+
+    setRecipient(data);
+    setLoading(false);
+  }
 
   const filteredRecipient = useMemo(
     () =>
@@ -52,9 +41,59 @@ export default function Recipient() {
     [q, recipient]
   );
 
-  function onChildChanged(value) {
-    const filterRecipient = recipient.filter(r => r.id !== value);
-    setRecipient(filterRecipient);
+  async function verifyDependencias(value) {
+    try {
+      if (recipientDeliveries.length === 0) {
+        const { data } = await api.get(`/recipient-delivery/${value}`);
+        if (data.length > 0) {
+          setRecipientDeliveries(data);
+
+          return false;
+        }
+
+        return true;
+      }
+    } catch (error) {
+      console.log(error);
+
+      toast.error('Não foi possivel deletar, tente novamente!');
+    }
+  }
+
+  async function onDeleteConfirmSuccess(id, data) {
+    if (data.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        const element = data[i];
+        await api.delete(`/delivery/${element.id}`);
+      }
+      handleDelete(id);
+    }
+  }
+
+  async function onDeleteSuccess(value) {
+    try {
+      const bool = await verifyDependencias(value);
+
+      if (bool) handleDelete(value);
+    } catch (error) {
+      console.log(error);
+
+      toast.error('Não foi possivel deletar, tente novamente!');
+    }
+  }
+
+  async function handleDelete(value) {
+    try {
+      await api.delete(`/recipient/${value}`);
+      const itensCopy = Array.from(recipient);
+      const filterRecipient = itensCopy.filter(r => r.id !== value);
+      setRecipient(filterRecipient);
+      toast.success('Destinatário deletado com sucesso!');
+    } catch (error) {
+      console.log(error);
+
+      toast.error('Não foi possivel deletar, tente novamente!');
+    }
   }
 
   return (
@@ -75,7 +114,7 @@ export default function Recipient() {
         </Buttons>
         {!loading && (
           <>
-            {recipient.length > 0 ? (
+            {filteredRecipient.length > 0 ? (
               <div>
                 <ul className="header">
                   <li>ID</li>
@@ -103,7 +142,14 @@ export default function Recipient() {
                           <li className="action">
                             <Actions
                               idRecipient={d.id}
-                              callbackParent={string => onChildChanged(string)}
+                              data={recipientDeliveries}
+                              onDelete={() => onDeleteSuccess(d.id)}
+                              onDeleteConfirm={() =>
+                                onDeleteConfirmSuccess(
+                                  d.id,
+                                  recipientDeliveries
+                                )
+                              }
                             />
                           </li>
                         </ul>
