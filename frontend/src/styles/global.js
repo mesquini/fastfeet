@@ -51,6 +51,20 @@ export default createGlobalStyle`
     cursor: pointer;
   }
 
+  .css-2b097c-container {
+    margin-top: 10px;
+
+    .css-b8ldur-Input {
+      margin-top: 10px;
+    }
+  }
+
+  .css-14jk2my-container {
+    margin-top: 10px;
+  }
+
+
+
   .form {
     background: ${({ theme }) => theme.background};
     border-radius: 6px;

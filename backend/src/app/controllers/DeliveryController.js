@@ -16,6 +16,7 @@ import {
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
 import File from '../models/File';
+import DeliveryProblem from '../models/DeliveryProblem';
 
 class DeliveryController {
     async index(req, res) {
@@ -165,7 +166,7 @@ class DeliveryController {
             return res.status(400).json({ error: 'Validation fails' });
         }
 
-        const { canceled_at, start_date, end_date } = req.body;
+        const { canceled_at, start_date, end_date, signature_id } = req.body;
 
         const delivery = await Delivery.findByPk(req.params.id);
 
@@ -234,17 +235,58 @@ class DeliveryController {
                 });
 
             delivery.start_date = start_date;
+            delivery.end_date = end_date;
+            delivery.signature_id = signature_id;
+
             await delivery.save();
 
             return res.json(delivery);
         }
         return res.status(400).json({ error: 'Invalid option!' });
     }
+
+    async updateAdm(req, res) {
+        const schema = Yup.object().shape({
+            recipient_id: Yup.number().required(),
+            deliveryman_id: Yup.number().required(),
+            product: Yup.string().required(),
+        });
+
+        if (!(await schema.isValid(req.body))) {
+            return res.status(400).json({ error: 'Validation fails' });
+        }
+
+        const { recipient_id, deliveryman_id, product } = req.body;
+
+        const delivery = await Delivery.findByPk(req.params.id);
+
+        if (!delivery) {
+            return res.status(404).json({ error: 'Delivery does not exist' });
+        }
+
+        delivery.recipient_id = recipient_id;
+        delivery.deliveryman_id = deliveryman_id;
+        delivery.product = product;
+
+        await delivery.save();
+
+        return res.json(delivery);
+    }
+
     async delete(req, res) {
         const delivery = await Delivery.findByPk(req.params.id);
 
         if (!delivery)
             return res.status(404).json({ error: 'Delivery not found' });
+
+        const deliveryProblems = await DeliveryProblem.findAll({
+            where: { delivery_id: req.params.id },
+        });
+
+        if (deliveryProblems)
+            await DeliveryProblem.destroy({
+                where: { delivery_id: req.params.id },
+            });
 
         await delivery.destroy(req.params.id);
 

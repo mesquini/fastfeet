@@ -21,6 +21,8 @@ export const Content = styled.div`
           margin-top: 10px;
           width: 100%;
         }
+
+        margin-top: 10px;
       }
 
       .infos {
@@ -28,12 +30,9 @@ export const Content = styled.div`
         grid-template-columns: repeat(2, 1fr);
         grid-gap: 25px;
 
-        div {
-          display: grid;
-          margin-right: 5px;
-          input {
-            margin-top: 10px;
-          }
+        input {
+          width: 100%;
+          height: 15%;
         }
       }
     }
@@ -45,6 +44,7 @@ export const Content = styled.div`
       border-radius: 4px;
       padding: 0 15px;
       margin: 0 0 10px;
+      text-transform: capitalize;
 
       &::placeholder {
         color: rgba(0, 0, 0, 0.5);
@@ -95,4 +95,11 @@ export const Buttons = styled.div`
       background: ${darken(0.1, '#7156c1')};
     }
   }
+`;
+
+export const Loading = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10%;
 `;

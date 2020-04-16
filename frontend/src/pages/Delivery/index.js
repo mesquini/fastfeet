@@ -75,13 +75,17 @@ export default function Delivery() {
         <h2>Gerenciando encomendas</h2>
         <Buttons>
           <div>
-            <FaSistrix size={18} />
-            <input
-              type="text"
-              value={q}
-              onChange={e => setQ(e.target.value)}
-              placeholder="Buscar por encomendas"
-            />
+            {delivery.length > 0 && (
+              <>
+                <FaSistrix size={18} />
+                <input
+                  type="text"
+                  value={q}
+                  onChange={e => setQ(e.target.value)}
+                  placeholder="Buscar por encomendas"
+                />
+              </>
+            )}
           </div>
           <Link to="/new-delivery">+ CADASTRAR</Link>
         </Buttons>
@@ -99,39 +103,49 @@ export default function Delivery() {
                   <li style={{ marginLeft: 'inherit' }}>STATUS</li>
                   <li className="action">AÇÕES</li>
                 </ul>
-                {filteredDelivery.map(d => (
-                  <div key={d.id}>
-                    <ul>
-                      <li>#{d.id}</li>
-                      <li>{d.product}</li>
-                      <li>{d.recipient.name}</li>
-                      <li className="deliveryman">
-                        <Avatar deliveryman={d.deliveryman} />
-                        {d.deliveryman.name}
-                      </li>
-                      <li style={{ marginLeft: 'inherit' }}>
-                        {d.recipient.city}
-                      </li>
-                      <li style={{ marginLeft: 'inherit' }}>
-                        {d.recipient.state}
-                      </li>
-                      <Status status={d.status}>
-                        <GiPlainCircle size={12} />
-                        {d.status.toUpperCase()}
-                      </Status>
-                      <li className="action">
-                        <Actions
-                          idDelivery={d.id}
-                          onDelete={() => onDeleteSuccess(d.id)}
-                        />
-                      </li>
-                    </ul>
-                  </div>
-                ))}
+                {filteredDelivery.length === 0 ? (
+                  <Empty>
+                    <strong>
+                      Você não tem nenhuma encomenda com esse nome!
+                    </strong>
+                  </Empty>
+                ) : (
+                  <>
+                    {filteredDelivery.map(d => (
+                      <div key={d.id}>
+                        <ul>
+                          <li>#{d.id}</li>
+                          <li>{d.product}</li>
+                          <li>{d.recipient.name}</li>
+                          <li className="deliveryman">
+                            <Avatar deliveryman={d.deliveryman} />
+                            {d.deliveryman.name}
+                          </li>
+                          <li style={{ marginLeft: 'inherit' }}>
+                            {d.recipient.city}
+                          </li>
+                          <li style={{ marginLeft: 'inherit' }}>
+                            {d.recipient.state}
+                          </li>
+                          <Status status={d.status}>
+                            <GiPlainCircle size={12} />
+                            {d.status.toUpperCase()}
+                          </Status>
+                          <li className="action">
+                            <Actions
+                              idDelivery={d.id}
+                              onDelete={() => onDeleteSuccess(d.id)}
+                            />
+                          </li>
+                        </ul>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
             ) : (
               <Empty>
-                <strong>Você não possuí nenhuma emcomenda cadastrada!</strong>
+                <strong>Você não possuí nenhuma encomenda cadastrada!</strong>
               </Empty>
             )}
           </>

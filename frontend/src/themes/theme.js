@@ -8,6 +8,7 @@ export const lightTheme = {
   body: '#eee',
   textHeader: 'rgba(0, 0, 0, 0.5)',
   active: '#000',
+  isFocused: '#0777D9',
 };
 
 export const darkTheme = {
@@ -20,4 +21,5 @@ export const darkTheme = {
   textHeader: 'rgba(255, 255, 255, 0.5)',
   body: 'rgba(0, 0, 0, 0.8)',
   active: '#fff',
+  isFocused: '#1e205D',
 };

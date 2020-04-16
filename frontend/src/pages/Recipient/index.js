@@ -102,19 +102,23 @@ export default function Recipient() {
         <h2>Gerenciando destinatários</h2>
         <Buttons>
           <div>
-            <FaSistrix size={18} />
-            <input
-              type="text"
-              value={q}
-              onChange={e => setQ(e.target.value)}
-              placeholder="Buscar por destinatários"
-            />
+            {recipient.length > 0 && (
+              <>
+                <FaSistrix size={18} />
+                <input
+                  type="text"
+                  value={q}
+                  onChange={e => setQ(e.target.value)}
+                  placeholder="Buscar por destinatários"
+                />
+              </>
+            )}
           </div>
           <Link to="/new-recipient">+ CADASTRAR</Link>
         </Buttons>
         {!loading && (
           <>
-            {filteredRecipient.length > 0 ? (
+            {recipient.length > 0 ? (
               <div>
                 <ul className="header">
                   <li>ID</li>

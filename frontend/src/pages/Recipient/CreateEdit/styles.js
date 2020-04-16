@@ -15,6 +15,10 @@ export const Content = styled.div`
   form {
     width: 70%;
 
+    input {
+      text-transform: capitalize;
+    }
+
     .form {
       .name {
         input {

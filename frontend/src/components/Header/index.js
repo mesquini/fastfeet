@@ -32,7 +32,7 @@ export default function Header() {
             to="/deliveries"
             activeStyle={{ color: theme.toggleTheme.active }}
           >
-            EMCOMENDAS
+            ENCOMENDAS
           </NavLink>
           <NavLink
             activeStyle={{ color: theme.toggleTheme.active }}

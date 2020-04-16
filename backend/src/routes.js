@@ -55,13 +55,10 @@ routes.get('/delivery/:id', DeliveryController.one);
 routes.get('/deliveries', DeliveryController.index);
 routes.post('/delivery', DeliveryController.store);
 routes.put('/delivery/:id', DeliveryController.update);
+routes.put('/delivery/:id/adm', DeliveryController.updateAdm);
 routes.delete('/delivery/:id', DeliveryController.delete);
 
-routes.post(
-    '/delivery/:id/signature',
-    upload.single('file'),
-    SignatureController.store
-);
+routes.post('/signature', upload.single('file'), SignatureController.store);
 
 routes.get('/deliveries/problems', DeliveryProblemController.show);
 routes.get('/delivery/:id/problems', DeliveryProblemController.index);

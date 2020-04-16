@@ -24,6 +24,7 @@ export default function DeliveryProblem() {
     const { data } = await api.get('/deliveries/problems');
 
     setProblems(data.filter(f => !f.delivery.canceled_at));
+
     setLoading(false);
   }
 
