@@ -38,7 +38,7 @@ class DeliveryController {
                 {
                     model: Deliveryman,
                     as: 'deliveryman',
-                    attributes: ['name', 'email'],
+                    attributes: ['id', 'name', 'email'],
                     include: [
                         {
                             model: File,
@@ -51,6 +51,7 @@ class DeliveryController {
                     model: Recipient,
                     as: 'recipient',
                     attributes: [
+                        'id',
                         'name',
                         'street',
                         'number',
@@ -122,6 +123,14 @@ class DeliveryController {
         if (!(await schema.isValid(req.body)))
             return res.status(400).json({ error: 'Field is required' });
 
+        const deliveryman = await Deliveryman.findByPk(req.body.deliveryman_id);
+        if (!deliveryman)
+            return res.status(404).json({ message: 'Deliveryman not found!' });
+
+        const recipient = await Recipient.findByPk(req.body.recipient_id);
+        if (!recipient)
+            return res.status(404).json({ message: 'Recipient not found!' });
+
         let delivery = await Delivery.create(req.body);
 
         delivery = await Delivery.findByPk(delivery.id, {
@@ -130,12 +139,13 @@ class DeliveryController {
                 {
                     model: Deliveryman,
                     as: 'deliveryman',
-                    attributes: ['name', 'email'],
+                    attributes: ['id', 'name', 'email'],
                 },
                 {
                     model: Recipient,
                     as: 'recipient',
                     attributes: [
+                        'id',
                         'name',
                         'street',
                         'number',

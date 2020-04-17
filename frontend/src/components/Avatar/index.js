@@ -14,10 +14,10 @@ export default function Avatar({ deliveryman }) {
 
       if (name.length === 2) {
         const letter = name[0].charAt(0) + name[1].charAt(0);
-        setLetters(letter);
+        setLetters(letter.toUpperCase());
       } else if (name.length === 1) {
         const letter = name[0].charAt(0);
-        setLetters(letter);
+        setLetters(letter.toUpperCase());
       }
     }
   }, [deliveryman.avatar, deliveryman.name]);

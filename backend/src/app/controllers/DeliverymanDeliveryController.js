@@ -4,12 +4,7 @@ import File from '../models/File';
 
 class DeliverymanDeliveryController {
     async index(req, res) {
-        const {
-            id: deliveryman_id,
-            name,
-            email,
-            avatar,
-        } = await Deliveryman.findByPk(req.params.id, {
+        const deliveryman = await Deliveryman.findByPk(req.params.id, {
             attributes: ['id', 'name', 'email'],
             include: [
                 {
@@ -19,6 +14,11 @@ class DeliverymanDeliveryController {
                 },
             ],
         });
+
+        if (!deliveryman)
+            return res.status(404).json({ message: 'Deliveryman not found!' });
+
+        const { id: deliveryman_id, name, email, avatar } = deliveryman;
 
         const deliveries = await Delivery.findAll({
             attributes: [

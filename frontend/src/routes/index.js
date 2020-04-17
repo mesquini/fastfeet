@@ -8,7 +8,9 @@ import Delivery from '../pages/Delivery';
 import DeliveryEditNew from '../pages/Delivery/CreateEdit';
 
 import DeliveryProblem from '../pages/DeliveryProblem';
+
 import Deliveryman from '../pages/Deliveryman';
+import DeliverymanEditNew from '../pages/Deliveryman/CreateEdit';
 
 import Recipient from '../pages/Recipient';
 import RecipientEditNew from '../pages/Recipient/CreateEdit';
@@ -23,7 +25,10 @@ export default function Routes() {
       <Route path="/delivery/:id" component={DeliveryEditNew} isPrivate />
 
       <Route path="/delivery-problem" component={DeliveryProblem} isPrivate />
-      <Route path="/deliveryman" component={Deliveryman} isPrivate />
+
+      <Route path="/deliverymanes" component={Deliveryman} isPrivate />
+      <Route path="/new-deliveryman" component={DeliverymanEditNew} isPrivate />
+      <Route path="/deliveryman/:id" component={DeliverymanEditNew} isPrivate />
 
       <Route path="/recipients" component={Recipient} isPrivate />
       <Route path="/new-recipient" component={RecipientEditNew} isPrivate />

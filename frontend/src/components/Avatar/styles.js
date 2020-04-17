@@ -15,6 +15,7 @@ function gera_cor() {
 export const Container = styled.div`
   img {
     width: 35px;
+    height: 35px;
     border-radius: 50%;
     margin-right: 5px;
     margin-top: -8px;

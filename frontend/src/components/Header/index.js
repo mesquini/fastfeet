@@ -10,6 +10,7 @@ import { Container, Content, ToggleContainer } from './styles';
 
 import { lightTheme, darkTheme } from '~/themes/theme';
 import { darkMode } from '~/store/modules/theme/actions';
+import { signOut } from '~/store/modules/auth/actions';
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -21,6 +22,10 @@ export default function Header() {
     const toggleTheme = themeChange === 'light' ? lightTheme : darkTheme;
 
     dispatch(darkMode(themeChange, toggleTheme));
+  }
+
+  function handleSignOut() {
+    dispatch(signOut());
   }
 
   return (
@@ -36,7 +41,7 @@ export default function Header() {
           </NavLink>
           <NavLink
             activeStyle={{ color: theme.toggleTheme.active }}
-            to="/deliveryman"
+            to="/deliverymanes"
           >
             ENTREGADORES
           </NavLink>
@@ -60,7 +65,9 @@ export default function Header() {
           </ToggleContainer>
           <div>
             <p>Admin FastFeet</p>
-            <button type="button">Sair do sistema</button>
+            <button type="button" onClick={handleSignOut}>
+              Sair do sistema
+            </button>
           </div>
         </aside>
       </Content>
