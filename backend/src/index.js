@@ -26,9 +26,9 @@ class Index {
 
     middlewares() {
         this.server.use(Sentry.Handlers.requestHandler());
+        this.server.use(cors({ exposedHeaders: 'x-total-count' }));
         this.server.use(express.json());
         this.server.use(morgan('dev'));
-        this.server.use(cors());
         this.server.use(helmet());
         this.server.use(
             '/files',

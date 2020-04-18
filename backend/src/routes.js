@@ -41,6 +41,11 @@ routes.get(
     '/deliveryman/:id/deliveries',
     DeliverymanDeliveryController.deliveries
 );
+//retorna o entregador e a encomenda especifica
+routes.get(
+    '/deliveryman/:idDeliveryman/delivery/:idDelivery',
+    DeliverymanDeliveryController.delivery
+);
 
 //retorna todos os entregadores com o avatar
 routes.get('/deliverymanes', DeliverymanController.index);

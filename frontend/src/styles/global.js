@@ -2,6 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default createGlobalStyle`
 
@@ -61,6 +62,11 @@ export default createGlobalStyle`
 
   .css-14jk2my-container {
     margin-top: 10px;
+  }
+
+  .table td, .table th {
+    vertical-align: middle;
+    border-top: 0;
   }
 
 

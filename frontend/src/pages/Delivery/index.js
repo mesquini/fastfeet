@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import queryString from 'query-string';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { FaSistrix } from 'react-icons/fa';
 import { GiPlainCircle } from 'react-icons/gi';
 import { ClapSpinner } from 'react-spinners-kit';
+
+import { Table, Button } from 'react-bootstrap';
 
 import Avatar from '~/components/Avatar';
 
@@ -11,26 +14,41 @@ import api from '~/services/api';
 import { toast } from 'react-toastify';
 
 import Actions from './actions';
-import { Container, Content, Buttons, Status, Empty, Loading } from './styles';
+
+import {
+  Container,
+  Content,
+  Buttons,
+  Status,
+  Empty,
+  Loading,
+  Navigation,
+} from './styles';
 
 export default function Delivery() {
   const token = useSelector(state => state.auth.token);
+  const theme = useSelector(state => state.theme);
 
   const [delivery, setDelivery] = useState([]);
   const [q, setQ] = useState('');
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const query = useLocation().search;
+  const history = useHistory();
 
   useEffect(() => {
     async function loadDelivery() {
-      setLoading(true);
-      const { data } = await api.get('/deliveries', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const values = queryString.parse(query);
 
-      verifyStatus(data);
+      setLoading(true);
+      const resp = await api.get(`/deliveries?page=${values.page || page}`);
+
+      setTotal(resp.headers['x-total-count']);
+      verifyStatus(resp.data);
     }
     loadDelivery();
-  }, [token]);
+  }, [token, query, page]);
 
   function verifyStatus(data) {
     const newArr = data.map(d => {
@@ -45,6 +63,20 @@ export default function Delivery() {
 
     setDelivery(newArr);
     setLoading(false);
+  }
+
+  function nextPage() {
+    if (page < Math.ceil(total / 10)) {
+      setPage(value => value + 1);
+      history.push(`/deliveries?page=${page + 1}`);
+    }
+  }
+
+  function prevPage() {
+    if (page > 1) {
+      setPage(value => value - 1);
+      history.push(`/deliveries?page=${page - 1}`);
+    }
   }
 
   const filteredDelivery = useMemo(
@@ -90,19 +122,9 @@ export default function Delivery() {
           <Link to="/new-delivery">+ CADASTRAR</Link>
         </Buttons>
         {!loading && (
-          <>
+          <div>
             {delivery.length > 0 ? (
-              <div>
-                <ul className="header">
-                  <li>ID</li>
-                  <li>PRODUTO</li>
-                  <li>DESTINATÁRIO</li>
-                  <li>ENTREGADOR</li>
-                  <li style={{ marginLeft: 'inherit' }}>CIDADE</li>
-                  <li>ESTADO</li>
-                  <li style={{ marginLeft: 'inherit' }}>STATUS</li>
-                  <li className="action">AÇÕES</li>
-                </ul>
+              <>
                 {filteredDelivery.length === 0 ? (
                   <Empty>
                     <strong>
@@ -110,45 +132,70 @@ export default function Delivery() {
                     </strong>
                   </Empty>
                 ) : (
-                  <>
+                  <Table
+                    style={{ borderRadius: 8 }}
+                    responsive
+                    striped
+                    hover
+                    variant={theme.theme}
+                  >
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>PRODUTO</th>
+                        <th>DESTINATÁRIO</th>
+                        <th>ENTREGADOR</th>
+                        <th>CIDADE</th>
+                        <th>ESTADO</th>
+                        <th style={{ textAlign: 'center' }}>STATUS</th>
+                        <th style={{ textAlign: 'end' }}>AÇÕES</th>
+                      </tr>
+                    </thead>
                     {filteredDelivery.map(d => (
-                      <div key={d.id}>
-                        <ul>
-                          <li>#{d.id}</li>
-                          <li>{d.product}</li>
-                          <li>{d.recipient.name}</li>
-                          <li className="deliveryman">
+                      <tbody key={d.id}>
+                        <tr>
+                          <td>#{d.id}</td>
+                          <td>{d.product}</td>
+                          <td>{d.recipient.name}</td>
+                          <td className="deliveryman">
                             <Avatar deliveryman={d.deliveryman} />
                             {d.deliveryman.name}
-                          </li>
-                          <li style={{ marginLeft: 'inherit' }}>
-                            {d.recipient.city}
-                          </li>
-                          <li style={{ marginLeft: 'inherit' }}>
-                            {d.recipient.state}
-                          </li>
-                          <Status status={d.status}>
-                            <GiPlainCircle size={12} />
-                            {d.status.toUpperCase()}
-                          </Status>
-                          <li className="action">
+                          </td>
+                          <td>{d.recipient.city}</td>
+                          <td>{d.recipient.state}</td>
+                          <td>
+                            <Status status={d.status}>
+                              <GiPlainCircle size={12} />
+                              {d.status.toUpperCase()}
+                            </Status>
+                          </td>
+                          <td style={{ textAlign: 'end' }}>
                             <Actions
                               idDelivery={d.id}
+                              idDeliveryman={d.deliveryman.id}
                               onDelete={() => onDeleteSuccess(d.id)}
                             />
-                          </li>
-                        </ul>
-                      </div>
+                          </td>
+                        </tr>
+                      </tbody>
                     ))}
-                  </>
+                  </Table>
                 )}
-              </div>
+                <Navigation>
+                  <Button type="button" onClick={prevPage}>
+                    voltar
+                  </Button>
+                  <Button type="button" onClick={nextPage}>
+                    proximo
+                  </Button>
+                </Navigation>
+              </>
             ) : (
               <Empty>
                 <strong>Você não possuí nenhuma encomenda cadastrada!</strong>
               </Empty>
             )}
-          </>
+          </div>
         )}
         <Loading>
           <ClapSpinner

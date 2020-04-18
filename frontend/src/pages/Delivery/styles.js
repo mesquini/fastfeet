@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function value(status, font) {
   switch (status) {
     case 'Entregue':
@@ -18,41 +20,38 @@ function value(status, font) {
 }
 
 export const Container = styled.div`
-  padding: 50px;
+  padding: 30px;
 `;
 
 export const Content = styled.div`
+  .table td,
+  .table th tbody {
+    padding: 1.5rem;
+  }
   div {
-    .header {
-      font-weight: bold;
-      background: none;
-      margin-bottom: -30px;
+    border-radius: 8px;
 
-      .action {
-        display: flex;
-        justify-content: flex-end;
-      }
-    }
+    table {
+      tr {
+        background: ${({ theme }) => theme.background};
+        color: ${({ theme }) => theme.text};
 
-    ul {
-      display: grid;
-      grid-template-columns: 80px repeat(7, 1fr);
-      margin: 20px;
-      padding: 20px;
-      border-radius: 6px;
-      background: ${({ theme }) => theme.background};
-
-      .deliveryman {
-        display: flex;
-        div {
-          margin-top: -4px;
+        .deliveryman {
+          display: flex;
+          align-items: center;
+          div {
+            border-radius: 50%;
+          }
         }
       }
+    }
+  }
 
-      .action {
-        display: flex;
-        justify-content: flex-end;
-      }
+  @media (max-width: 700px) {
+    h2 {
+      font-size: 1.35rem;
+      font-weight: bold;
+      text-align: center;
     }
   }
 `;
@@ -78,6 +77,7 @@ export const Buttons = styled.div`
   margin-top: 35px;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 15px;
 
   div {
     position: relative;
@@ -95,6 +95,7 @@ export const Buttons = styled.div`
       position: absolute;
       bottom: 10px;
       left: 25px;
+      top: 7px;
       color: rgba(0, 0, 0, 0.5);
     }
   }
@@ -105,9 +106,31 @@ export const Buttons = styled.div`
     border-radius: 5px;
     font-weight: bold;
     color: #fff;
+    text-decoration: none;
 
     &:hover {
       background: ${darken(0.1, '#7156c1')};
+    }
+  }
+
+  @media (max-width: 700px) {
+    display: grid;
+    margin: 25px 0 25px;
+    justify-content: center;
+
+    div {
+      margin: 0;
+      padding: 0;
+
+      svg {
+        left: 6px;
+        top: 6px;
+      }
+    }
+
+    a {
+      text-align: center;
+      margin-top: 10px;
     }
   }
 `;
@@ -130,10 +153,6 @@ export const Loading = styled.div`
   margin-top: 10%;
 `;
 
-export const ContainerAction = styled.div`
-  position: relative;
-`;
-
 export const Badge = styled.button`
   background: none;
   border: 0;
@@ -150,7 +169,8 @@ export const Badge = styled.button`
 export const Options = styled.div`
   position: absolute;
   width: 125px;
-  margin-left: -52px;
+  margin-left: -15px;
+  margin-top: 10px;
   background: ${({ theme }) => theme.power};
   border-radius: 4px;
   padding: 15px 5px;
@@ -159,7 +179,7 @@ export const Options = styled.div`
   &::before {
     content: '';
     position: absolute;
-    left: calc(50% - 8px);
+    left: calc(40% - -5px);
     top: -10px;
     height: 0;
     width: 0;
@@ -190,6 +210,9 @@ export const Options = styled.div`
       margin-right: 8px;
     }
   }
+
+  @media (max-width: 1000px) {
+  }
 `;
 
 export const ModalLayout = styled.div`
@@ -197,7 +220,9 @@ export const ModalLayout = styled.div`
   border-radius: 8px;
   padding: 50px;
   color: #000;
+`;
 
+export const Delete = styled.div`
   h2 {
     color: #8c031c;
     border-bottom: 1px solid #000;
@@ -209,7 +234,6 @@ export const ModalLayout = styled.div`
     display: flex;
     justify-content: space-between;
     margin-top: 25px;
-
     button {
       border: 0;
       border-radius: 6px;
@@ -221,4 +245,43 @@ export const ModalLayout = styled.div`
       }
     }
   }
+`;
+
+export const Infos = styled.div`
+  h5 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  p {
+    line-height: 24px;
+  }
+
+  .adress,
+  .date {
+    border-bottom: 1px solid #000;
+    padding-bottom: 5px;
+  }
+
+  .signature {
+    display: grid;
+    img {
+      width: 100%;
+      height: 80px;
+    }
+  }
+
+  .signature,
+  .date {
+    padding-top: 5px;
+    h5 {
+      margin-top: 5px;
+    }
+  }
+`;
+
+export const Navigation = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
 `;
