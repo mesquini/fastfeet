@@ -10,7 +10,7 @@ export const Content = styled.div`
   justify-content: center;
   justify-items: center;
   width: 100%;
-  padding: 50px;
+  padding: 30px;
 
   form {
     width: 70%;
@@ -27,7 +27,7 @@ export const Content = styled.div`
         }
       }
 
-      .andress {
+      .address {
         display: grid;
         grid-template-columns: 15% 75% 10%;
 
@@ -47,14 +47,15 @@ export const Content = styled.div`
       }
 
       .region {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+        justify-content: space-between;
 
         div {
           display: grid;
           margin-right: 5px;
           input {
             margin-top: 5px;
+            width: 100%;
           }
         }
       }
@@ -72,6 +73,7 @@ export const Content = styled.div`
         color: rgba(0, 0, 0, 0.5);
       }
     }
+
     span {
       color: red;
       align-self: flex-start;
@@ -80,11 +82,46 @@ export const Content = styled.div`
       line-height: 14px;
     }
   }
+
+  @media (max-width: 950px) {
+    form {
+      .form {
+        .address {
+          grid-template-columns: repeat(2, 1fr) 12%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 750px) {
+    form {
+      width: 95%;
+
+      .form {
+        .region,
+        .address {
+          display: block;
+          div {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
 `;
 
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 970px) {
+    h2 {
+      font-size: 1.8rem;
+    }
+
+    display: grid;
+    justify-content: center;
+  }
 `;
 
 export const Buttons = styled.div`
@@ -117,4 +154,16 @@ export const Buttons = styled.div`
       background: ${darken(0.1, '#7156c1')};
     }
   }
+
+  @media (max-width: 970px) {
+    justify-content: center;
+    margin-top: 20px;
+  }
+`;
+
+export const Loading = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10%;
 `;

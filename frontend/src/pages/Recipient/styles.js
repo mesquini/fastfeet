@@ -3,34 +3,31 @@ import { darken, lighten } from 'polished';
 
 export const Container = styled.div`
   width: 100%;
-  padding: 50px;
+  padding: 30px;
 `;
 
 export const Content = styled.div`
-  div {
-    .header {
-      font-weight: bold;
-      background: none;
-      margin-bottom: -30px;
+  .table td,
+  .table th tbody {
+    padding: 1.5rem;
+  }
 
-      .action {
-        display: flex;
-        justify-content: flex-end;
+  div {
+    border-radius: 8px;
+
+    table {
+      tr {
+        background: ${({ theme }) => theme.background};
+        color: ${({ theme }) => theme.text};
       }
     }
+  }
 
-    ul {
-      display: grid;
-      grid-template-columns: 10% 20% 65% 5%;
-      margin: 20px;
-      padding: 20px;
-      border-radius: 6px;
-      background: ${({ theme }) => theme.background};
-
-      .action {
-        display: flex;
-        justify-content: flex-end;
-      }
+  @media (max-width: 700px) {
+    h2 {
+      font-size: 1.35rem;
+      font-weight: bold;
+      text-align: center;
     }
   }
 `;
@@ -39,6 +36,7 @@ export const Buttons = styled.div`
   margin-top: 35px;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 15px;
 
   div {
     position: relative;
@@ -69,6 +67,27 @@ export const Buttons = styled.div`
 
     &:hover {
       background: ${darken(0.1, '#7156c1')};
+    }
+  }
+
+  @media (max-width: 700px) {
+    display: grid;
+    margin: 25px 0 25px;
+    justify-content: center;
+
+    div {
+      margin: 0;
+      padding: 0;
+
+      svg {
+        left: 6px;
+        top: 6px;
+      }
+    }
+
+    a {
+      text-align: center;
+      margin-top: 10px;
     }
   }
 `;
@@ -108,7 +127,8 @@ export const Badge = styled.button`
 export const Options = styled.div`
   position: absolute;
   width: 125px;
-  margin-left: -52px;
+  left: calc(100% - 130px);
+  margin-top: 5px;
   background: ${({ theme }) => theme.power};
   border-radius: 4px;
   padding: 15px 5px;
@@ -178,4 +198,10 @@ export const ModalLayout = styled.div`
       }
     }
   }
+`;
+
+export const Navigation = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
 `;

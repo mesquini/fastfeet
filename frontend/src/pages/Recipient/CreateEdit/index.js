@@ -8,7 +8,8 @@ import { MdKeyboardArrowLeft, MdCheck } from 'react-icons/md';
 import api from '~/services/api';
 import cepApi from '~/services/cep';
 
-import { Container, Content, Buttons, Header } from './styles';
+import { Container, Content, Buttons, Header, Loading } from './styles';
+import { ClapSpinner } from 'react-spinners-kit';
 
 const schema = Yup.object().shape({
   name: Yup.string().required('Nome é obrigatório!'),
@@ -23,36 +24,61 @@ const schema = Yup.object().shape({
 });
 
 export default function CreateEdit() {
+  const [name, setName] = useState('');
   const [cep, setCep] = useState('');
-  const [initialValue, setInitialValue] = useState({});
+  const [street, setStreet] = useState('');
+  const [number, setNumber] = useState('');
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [complements, setComplements] = useState('');
+
   const history = useHistory();
   const { id: recipientId } = useParams();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!!recipientId) {
       async function loadRecipient() {
+        setLoading(true);
         const { data } = await api.get(`/recipient/${recipientId}`);
-        setInitialValue(data);
+        setName(data.name);
         setCep(data.cep);
+        setStreet(data.street);
+        setNumber(data.number);
+        setState(data.state);
+        setCity(data.city);
+        setComplements(data.complements);
+        setLoading(false);
       }
       loadRecipient();
     }
   }, [recipientId]);
 
-  async function blurZipeCode() {
+  async function blurZipeCode(v) {
     try {
-      const resp = await cepApi.get(`${cep}/json`);
-      if (resp.status === 200) {
-        const data = {
-          street: resp.data.logradouro + ` ${resp.data.bairro}`,
-          city: resp.data.localidade,
-          state: resp.data.uf,
-          complements: resp.data.complemento,
-        };
-        setInitialValue(data);
+      if (cep.length !== 0 && cep.length === 8) {
+        setLoading(true);
+        const resp = await cepApi.get(`${cep}/json`);
+
+        if (resp.status === 200 && !resp.data.erro) {
+          const data = {
+            street: resp.data.logradouro + ` ${resp.data.bairro}`,
+            city: resp.data.localidade,
+            state: resp.data.uf,
+            complements: resp.data.complemento,
+          };
+          setStreet(data.street);
+          setState(data.state);
+          setCity(data.city);
+          setComplements(data.complements);
+        } else toast.warn('CEP não encontrado!');
+
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
+      toast.error('Erro ao buscar CEP!');
+      setLoading(false);
     }
   }
 
@@ -75,11 +101,7 @@ export default function CreateEdit() {
   return (
     <Container>
       <Content>
-        <Form
-          onSubmit={handleSubmit}
-          schema={schema}
-          initialData={initialValue}
-        >
+        <Form onSubmit={handleSubmit} schema={schema}>
           <Header>
             <h2>
               {!!recipientId
@@ -98,54 +120,96 @@ export default function CreateEdit() {
             </Buttons>
           </Header>
 
-          <div className="form">
-            <div className="name">
-              <strong>Nome</strong>
-              <Input
-                name="name"
-                placeholder="Entre com o nome do destinatário"
-              />
-            </div>
-
-            <div className="andress">
-              <div>
-                <strong>CEP</strong>
+          {!loading && (
+            <div className="form">
+              <div className="name">
+                <strong>Nome</strong>
                 <Input
-                  name="cep"
-                  placeholder="99999999"
-                  value={cep}
-                  onChange={e => setCep(e.target.value.replace(/[a-z]/, ''))}
-                  onBlur={blurZipeCode}
-                  maxLength={8}
+                  name="name"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="Entre com o nome do destinatário"
                 />
               </div>
-              <div>
-                <strong>Rua</strong>
-                <Input id="street" name="street" placeholder="Nome da rua" />
-              </div>
-              <div>
-                <strong>Número</strong>
-                <Input name="number" placeholder="999" />
-              </div>
-            </div>
 
-            <div className="region">
-              <div>
-                <strong>Cidade</strong>
-                <Input name="city" placeholder="Exemplo" />
+              <div className="address">
+                <div>
+                  <strong>CEP</strong>
+                  <Input
+                    name="cep"
+                    placeholder="99999999"
+                    value={cep}
+                    onChange={e =>
+                      setCep(e.target.value.replace(/[^0-9]/g, ''))
+                    }
+                    onBlur={blurZipeCode}
+                    maxLength={8}
+                  />
+                </div>
+                <div>
+                  <strong>Rua</strong>
+                  <Input
+                    id="street"
+                    name="street"
+                    value={street}
+                    onChange={e => setStreet(e.target.value)}
+                    placeholder="Nome da rua"
+                  />
+                </div>
+                <div>
+                  <strong>Número</strong>
+                  <Input
+                    name="number"
+                    value={number}
+                    onChange={e =>
+                      setNumber(e.target.value.replace(/[^0-9]/g, ''))
+                    }
+                    placeholder="999"
+                  />
+                </div>
               </div>
-              <div>
-                <strong>Estado</strong>
-                <Input name="state" placeholder="Estado" />
-              </div>
-              <div>
-                <strong>Complemento</strong>
-                <Input name="complements" placeholder="" />
+
+              <div className="region">
+                <div>
+                  <strong>Cidade</strong>
+                  <Input
+                    name="city"
+                    value={city}
+                    onChange={e => setCity(e.target.value)}
+                    placeholder="São Paulo"
+                  />
+                </div>
+                <div>
+                  <strong>Estado</strong>
+                  <Input
+                    name="state"
+                    value={state}
+                    onChange={e => setState(e.target.value)}
+                    placeholder="São Paulo"
+                  />
+                </div>
+                <div>
+                  <strong>Complemento</strong>
+                  <Input
+                    name="complements"
+                    value={complements}
+                    onChange={e => setComplements(e.target.value)}
+                    placeholder="..."
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </Form>
       </Content>
+      <Loading>
+        <ClapSpinner
+          loading={loading}
+          size={45}
+          frontColor="#7159c1"
+          backColor="#686769"
+        />
+      </Loading>
     </Container>
   );
 }

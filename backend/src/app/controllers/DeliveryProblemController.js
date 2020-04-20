@@ -10,12 +10,16 @@ class DeliveryProblemController {
     async show(req, res) {
         const { page = 1 } = req.query;
 
+        const count = await DeliveryProblem.count();
+
         const deliveryProblem = await DeliveryProblem.findAll({
             order: ['id'],
             include: [{ model: Delivery, as: 'delivery', order: ['id'] }],
             limit: 10,
             offset: (page - 1) * 10,
         });
+
+        res.header('X-Total-Count', count);
 
         return res.json(deliveryProblem);
     }
@@ -45,6 +49,11 @@ class DeliveryProblemController {
             }))
         )
             return res.status(400).json({ error: 'Validation fails' });
+
+        const delivery = await Delivery.findByPk(delivery_id);
+
+        if (!delivery)
+            return res.status(404).json({ message: 'Delivery not found!' });
 
         const deliveryProblem = await DeliveryProblem.create({
             description,

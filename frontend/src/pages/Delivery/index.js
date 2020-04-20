@@ -58,7 +58,7 @@ export default function Delivery() {
       else if (!d.start_date && !d.end_date && !d.canceled_at)
         return { ...d, status: 'Pendente' };
 
-      return 0;
+      return d;
     });
 
     setDelivery(newArr);
@@ -181,12 +181,12 @@ export default function Delivery() {
                     ))}
                   </Table>
                 )}
-                <Navigation>
+                <Navigation total={total}>
                   <Button type="button" onClick={prevPage}>
-                    voltar
+                    Voltar
                   </Button>
                   <Button type="button" onClick={nextPage}>
-                    proximo
+                    Próximo
                   </Button>
                 </Navigation>
               </>

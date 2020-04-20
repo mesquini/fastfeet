@@ -5,10 +5,6 @@
 
 <strong>The application under development is an app for a fictional shipping company, FastFeet</strong><br />
 
-<h3 align="center">
-  :construction: In construction :construction:
-</h3>
-
 <p>This challenge is part of the Final Challenge, which is a complete application (Back-end, Front-end and Mobile) of [Bootcamp GoStack 10](https://rocketseat.com.br/bootcamp)</p>
 
 <p align="center">
@@ -35,22 +31,20 @@ This project was developed to studying JSON and React with the following technol
 - [PostgreSQL](https://www.postgresql.org/)
 - [node-postgres](https://www.npmjs.com/package/pg)
 - [Redis](https://redis.io/)
-- [MongoDB](https://www.mongodb.com/)
-- [Mongoose](https://mongoosejs.com/)
 - [JWT](https://jwt.io/)
 - [Multer](https://github.com/expressjs/multer)
 - [Bcrypt](https://www.npmjs.com/package/bcrypt)
 - [Youch](https://www.npmjs.com/package/youch)
-- [Yup](https://www.npmjs.com/package/yup)
 - [Bee Queue](https://www.npmjs.com/package/bcrypt)
 - [Nodemailer](https://nodemailer.com/about/)
 - [date-fns](https://date-fns.org/)
 - [Sentry](https://sentry.io/)
 - [DotEnv](https://www.npmjs.com/package/dotenv)
 - [ESLint](https://eslint.org/)
-- [Visual Studio Code](https://code.visualstudio.com/)
 - [Insomnia](https://insomnia.rest/)
 - [Mailtrap](https://mailtrap.io/)
+- [Yup](https://www.npmjs.com/package/yup)
+- [Visual Studio Code](https://code.visualstudio.com/)
 
 ## :information_source: How To Use
 
@@ -63,6 +57,10 @@ $ git clone https://github.com/mesquini/fastfeet
 > cd backend
 > yarn install
 > yarn dev
+
+> cd frontend
+> yarn install
+> yarn start
 ```
 
 ---

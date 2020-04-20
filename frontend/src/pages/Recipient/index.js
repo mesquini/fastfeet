@@ -1,35 +1,50 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { FaSistrix } from 'react-icons/fa';
 import { ClapSpinner } from 'react-spinners-kit';
 
 import api from '~/services/api';
 
-import { Container, Content, Buttons, Empty, Loading } from './styles';
+import {
+  Container,
+  Content,
+  Buttons,
+  Empty,
+  Loading,
+  Navigation,
+} from './styles';
 import { useSelector } from 'react-redux';
 import Actions from './actions.js';
 import { toast } from 'react-toastify';
 
-export default function Recipient() {
-  const token = useSelector(state => state.auth.token);
+import queryString from 'query-string';
+import { Table, Button } from 'react-bootstrap';
 
+export default function Recipient() {
   const [recipient, setRecipient] = useState([]);
   const [recipientDeliveries, setRecipientDeliveries] = useState([]);
   const [q, setQ] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const query = useLocation().search;
+  const history = useHistory();
+  const theme = useSelector(state => state.theme);
+
   useEffect(() => {
+    async function loadDelivery() {
+      setLoading(true);
+      const values = queryString.parse(query);
+      const resp = await api.get(`/recipients?page=${values.page || page}`);
+
+      setRecipient(resp.data);
+      setTotal(resp.headers['x-total-count']);
+      setLoading(false);
+    }
     loadDelivery();
-  }, [token]);
-
-  async function loadDelivery() {
-    setLoading(true);
-    const { data } = await api.get('/recipients');
-
-    setRecipient(data);
-    setLoading(false);
-  }
+  }, [query, page]);
 
   const filteredRecipient = useMemo(
     () =>
@@ -96,6 +111,20 @@ export default function Recipient() {
     }
   }
 
+  function nextPage() {
+    if (page < Math.ceil(total / 10)) {
+      setPage(value => value + 1);
+      history.push(`/recipients?page=${page + 1}`);
+    }
+  }
+
+  function prevPage() {
+    if (page > 1) {
+      setPage(value => value - 1);
+      history.push(`/recipients?page=${page - 1}`);
+    }
+  }
+
   return (
     <Container>
       <Content>
@@ -120,12 +149,6 @@ export default function Recipient() {
           <>
             {recipient.length > 0 ? (
               <div>
-                <ul className="header">
-                  <li>ID</li>
-                  <li>NOME</li>
-                  <li>ENDEREÇO</li>
-                  <li className="action">AÇÕES</li>
-                </ul>
                 {filteredRecipient.length === 0 ? (
                   <Empty>
                     <strong>
@@ -135,30 +158,56 @@ export default function Recipient() {
                   </Empty>
                 ) : (
                   <>
-                    {filteredRecipient.map(d => (
-                      <div key={d.id}>
-                        <ul>
-                          <li>#{d.id}</li>
-                          <li>{d.name}</li>
-                          <li>
-                            {d.street}, {d.number}, {d.city} - {d.state}
-                          </li>
-                          <li className="action">
-                            <Actions
-                              idRecipient={d.id}
-                              data={recipientDeliveries}
-                              onDelete={() => onDeleteSuccess(d.id)}
-                              onDeleteConfirm={() =>
-                                onDeleteConfirmSuccess(
-                                  d.id,
-                                  recipientDeliveries
-                                )
-                              }
-                            />
-                          </li>
-                        </ul>
-                      </div>
-                    ))}
+                    <Table
+                      style={{ borderRadius: 8 }}
+                      responsive
+                      striped
+                      hover
+                      variant={theme.theme}
+                    >
+                      <thead>
+                        <tr style={{ textAlign: 'center' }}>
+                          <th>ID</th>
+                          <th>NOME</th>
+                          <th>ENDEREÇO</th>
+                          <th style={{ textAlign: 'end' }}>AÇÕES</th>
+                        </tr>
+                      </thead>
+                      <>
+                        {filteredRecipient.map(d => (
+                          <tbody key={d.id} style={{ textAlign: 'center' }}>
+                            <tr>
+                              <td>#{d.id}</td>
+                              <td>{d.name}</td>
+                              <td>
+                                {d.street}, {d.number}, {d.city} - {d.state}
+                              </td>
+                              <td style={{ textAlign: 'end' }}>
+                                <Actions
+                                  idRecipient={d.id}
+                                  data={recipientDeliveries}
+                                  onDelete={() => onDeleteSuccess(d.id)}
+                                  onDeleteConfirm={() =>
+                                    onDeleteConfirmSuccess(
+                                      d.id,
+                                      recipientDeliveries
+                                    )
+                                  }
+                                />
+                              </td>
+                            </tr>
+                          </tbody>
+                        ))}
+                      </>
+                    </Table>
+                    <Navigation total={total}>
+                      <Button type="button" onClick={prevPage}>
+                        Voltar
+                      </Button>
+                      <Button type="button" onClick={nextPage}>
+                        Próximo
+                      </Button>
+                    </Navigation>
                   </>
                 )}
               </div>

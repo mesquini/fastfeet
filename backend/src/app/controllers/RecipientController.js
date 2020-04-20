@@ -13,12 +13,16 @@ class Recipient {
         } else {
             const { page = 1, q = '' } = req.query;
 
+            const count = await RecipientModel.count();
+
             const recipients = await RecipientModel.findAll({
                 order: ['id'],
                 where: { street: { [Op.iLike]: `${q}%` } },
                 limit: 10,
                 offset: (page - 1) * 10,
             });
+
+            res.header('X-Total-Count', count);
 
             return res.json(recipients);
         }

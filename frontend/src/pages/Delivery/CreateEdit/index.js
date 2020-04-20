@@ -10,6 +10,8 @@ import api from '~/services/api';
 
 import AsyncSelect from 'react-select/async';
 
+import { Button } from 'react-bootstrap';
+
 import { Container, Content, Buttons, Header, Loading } from './styles';
 import { useSelector } from 'react-redux';
 
@@ -178,10 +180,10 @@ export default function CreateEdit() {
                   <MdKeyboardArrowLeft size={24} color="#fff" />
                   VOLTAR
                 </Link>
-                <button type="submit">
+                <Button type="submit">
                   <MdCheck size={24} color="#fff" />
                   {!!deliveryId ? 'ALTERAR' : 'SALVAR'}
-                </button>
+                </Button>
               </Buttons>
             </Header>
 

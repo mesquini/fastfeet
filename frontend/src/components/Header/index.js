@@ -38,14 +38,16 @@ export default function Header() {
         bg={theme.theme}
         variant={theme.theme}
       >
-        <Navbar.Brand href="/">
-          <img
-            className="d-inline-block align-top"
-            src={logo}
-            width="170"
-            height="30"
-            alt="logo"
-          />
+        <Navbar.Brand>
+          <NavLink to="/deliveries">
+            <img
+              className="d-inline-block align-top"
+              src={logo}
+              width="170"
+              height="30"
+              alt="logo"
+            />
+          </NavLink>
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />

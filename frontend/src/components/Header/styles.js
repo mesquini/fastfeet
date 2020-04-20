@@ -11,6 +11,11 @@ export const Container = styled.div`
 
   .navbar-nav {
     font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-collapse {
   }
 
   .navbar {

@@ -10,10 +10,10 @@ export const Content = styled.div`
   justify-content: center;
   justify-items: center;
   width: 100%;
-  padding: 50px;
+  padding: 30px;
 
   form {
-    width: 70%;
+    width: 80%;
 
     .form {
       .name {
@@ -58,11 +58,43 @@ export const Content = styled.div`
       line-height: 14px;
     }
   }
+
+  @media (max-width: 970px) {
+    form {
+      width: 85%;
+
+      .form .infos {
+        display: block;
+
+        > div {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 700px) {
+    h2 {
+      font-size: 1.35rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      width: 100%;
+    }
+  }
 `;
 
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 970px) {
+    display: grid;
+    justify-content: center;
+  }
 `;
 
 export const Buttons = styled.div`
@@ -77,6 +109,7 @@ export const Buttons = styled.div`
   }
 
   a {
+    text-decoration: none;
     background: gray;
     margin-right: 15px;
   }
@@ -88,12 +121,19 @@ export const Buttons = styled.div`
     padding: 10px;
     border: 0;
     border-radius: 5px;
+    font-size: 14px;
     font-weight: bold;
     color: #fff;
+    transition: all 0.2s ease;
 
     &:hover {
       background: ${darken(0.1, '#7156c1')};
     }
+  }
+
+  @media (max-width: 970px) {
+    justify-content: center;
+    margin-top: 20px;
   }
 `;
 

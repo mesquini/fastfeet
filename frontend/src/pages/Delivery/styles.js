@@ -169,8 +169,8 @@ export const Badge = styled.button`
 export const Options = styled.div`
   position: absolute;
   width: 125px;
-  margin-left: -15px;
-  margin-top: 10px;
+  left: calc(100% - 130px);
+  margin-top: 5px;
   background: ${({ theme }) => theme.power};
   border-radius: 4px;
   padding: 15px 5px;

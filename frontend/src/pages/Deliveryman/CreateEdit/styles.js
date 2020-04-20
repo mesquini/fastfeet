@@ -10,7 +10,7 @@ export const Content = styled.div`
   justify-content: center;
   justify-items: center;
   width: 100%;
-  padding: 50px;
+  padding: 30px;
 
   form {
     width: 70%;
@@ -29,6 +29,10 @@ export const Content = styled.div`
           margin-top: 5px;
           width: 100%;
         }
+      }
+
+      .caczKD {
+        text-align: center;
       }
 
       .andress {
@@ -84,11 +88,32 @@ export const Content = styled.div`
       line-height: 14px;
     }
   }
+
+  @media (max-width: 970px) {
+  }
+
+  @media (max-width: 700px) {
+    h2 {
+      font-size: 1.35rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      width: 100%;
+    }
+  }
 `;
 
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 970px) {
+    display: grid;
+    justify-content: center;
+  }
 `;
 
 export const Buttons = styled.div`
@@ -120,6 +145,11 @@ export const Buttons = styled.div`
     &:hover {
       background: ${darken(0.1, '#7156c1')};
     }
+  }
+
+  @media (max-width: 970px) {
+    justify-content: center;
+    margin-top: 20px;
   }
 `;
 

@@ -7,37 +7,39 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  div {
-    .header {
-      font-weight: bold;
-      background: none;
-      margin-bottom: -30px;
+  h2 {
+    margin-bottom: 15px;
+  }
 
-      .action {
-        display: flex;
-        justify-content: flex-end;
+  .table td,
+  .table th tbody {
+    padding: 1.5rem;
+  }
+
+  div {
+    border-radius: 8px;
+
+    table {
+      tr {
+        background: ${({ theme }) => theme.background};
+        color: ${({ theme }) => theme.text};
       }
     }
+  }
 
-    ul {
-      display: grid;
-      grid-template-columns: 10% 85% 5%;
-      margin: 20px;
-      padding: 20px;
-      border-radius: 6px;
-      background: ${({ theme }) => theme.background};
+  @media (max-width: 700px) {
+    h2 {
+      font-size: 1.35rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
 
-      .action {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .description {
-        white-space: nowrap;
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+  @media (max-width: 700px) {
+    h2 {
+      font-size: 1.35rem;
+      font-weight: bold;
+      text-align: center;
     }
   }
 `;
@@ -76,7 +78,7 @@ export const Badge = styled.button`
 
 export const Options = styled.div`
   position: absolute;
-  margin-left: -105px;
+  left: calc(100% - 200px);
   margin-top: 5px;
   background: ${({ theme }) => theme.power};
   border-radius: 4px;
@@ -152,4 +154,10 @@ export const ModalLayout = styled.div`
       }
     }
   }
+`;
+
+export const Navigation = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
 `;

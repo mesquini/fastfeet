@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { FaSistrix } from 'react-icons/fa';
 import { ClapSpinner } from 'react-spinners-kit';
 
@@ -9,7 +9,18 @@ import api from '~/services/api';
 import { toast } from 'react-toastify';
 
 import Actions from './actions';
-import { Container, Content, Buttons, Empty, Loading } from './styles';
+import {
+  Container,
+  Content,
+  Buttons,
+  Empty,
+  Loading,
+  Navigation,
+} from './styles';
+
+import queryString from 'query-string';
+import { Table, Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
 export default function Deliveryman() {
   const [deliverymanes, setDeliverymanes] = useState([]);
@@ -17,16 +28,25 @@ export default function Deliveryman() {
   const [q, setQ] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const query = useLocation().search;
+  const history = useHistory();
+  const theme = useSelector(state => state.theme);
+
   useEffect(() => {
     async function loadDeliverymanes() {
-      setLoading(true);
-      const { data } = await api.get('/deliverymanes');
+      const values = queryString.parse(query);
 
-      setDeliverymanes(data);
+      setLoading(true);
+      const resp = await api.get(`/deliverymanes?page=${values.page || page}`);
+
+      setDeliverymanes(resp.data);
+      setTotal(resp.headers['x-total-count']);
       setLoading(false);
     }
     loadDeliverymanes();
-  }, []);
+  }, [page, query]);
 
   const filteredDeliverymanes = useMemo(
     () =>
@@ -93,6 +113,20 @@ export default function Deliveryman() {
     }
   }
 
+  function nextPage() {
+    if (page < Math.ceil(total / 10)) {
+      setPage(value => value + 1);
+      history.push(`/deliverymanes?page=${page + 1}`);
+    }
+  }
+
+  function prevPage() {
+    if (page > 1) {
+      setPage(value => value - 1);
+      history.push(`/deliverymanes?page=${page - 1}`);
+    }
+  }
+
   return (
     <Container>
       <Content>
@@ -114,16 +148,9 @@ export default function Deliveryman() {
           <Link to="/new-deliveryman">+ CADASTRAR</Link>
         </Buttons>
         {!loading && (
-          <>
+          <div>
             {deliverymanes.length > 0 ? (
-              <div>
-                <ul className="header">
-                  <li>ID</li>
-                  <li>FOTO</li>
-                  <li>NOME</li>
-                  <li>EMAIL</li>
-                  <li className="action">AÇÕES</li>
-                </ul>
+              <>
                 {filteredDeliverymanes.length === 0 ? (
                   <Empty>
                     <strong>
@@ -132,37 +159,65 @@ export default function Deliveryman() {
                   </Empty>
                 ) : (
                   <>
-                    {filteredDeliverymanes.map(d => (
-                      <div key={d.id}>
-                        <ul>
-                          <li>#{d.id}</li>
-                          <li className="deliveryman">
-                            <Avatar deliveryman={d} />
-                          </li>
-                          <li>{d.name}</li>
-                          <li>{d.email}</li>
-                          <li className="action">
-                            <Actions
-                              idDeliveryman={d.id}
-                              data={deliveries}
-                              onDelete={() => onDeleteSuccess(d.id)}
-                              onDeleteConfirm={() =>
-                                onDeleteConfirmSuccess(d.id, deliveries)
-                              }
-                            />
-                          </li>
-                        </ul>
-                      </div>
-                    ))}
+                    <Table
+                      style={{ borderRadius: 8 }}
+                      responsive
+                      striped
+                      hover
+                      variant={theme.theme}
+                    >
+                      <thead>
+                        <tr style={{ textAlign: 'center' }}>
+                          <th>ID</th>
+                          <th>FOTO</th>
+                          <th>NOME</th>
+                          <th>EMAIL</th>
+                          <th style={{ textAlign: 'end' }}>AÇÕES</th>
+                        </tr>
+                      </thead>
+
+                      <>
+                        {filteredDeliverymanes.map(d => (
+                          <tbody key={d.id} style={{ textAlign: 'center' }}>
+                            <tr>
+                              <td>#{d.id}</td>
+                              <td className="deliveryman">
+                                <Avatar deliveryman={d} />
+                              </td>
+                              <td>{d.name}</td>
+                              <td>{d.email}</td>
+                              <td style={{ textAlign: 'end' }}>
+                                <Actions
+                                  idDeliveryman={d.id}
+                                  data={deliveries}
+                                  onDelete={() => onDeleteSuccess(d.id)}
+                                  onDeleteConfirm={() =>
+                                    onDeleteConfirmSuccess(d.id, deliveries)
+                                  }
+                                />
+                              </td>
+                            </tr>
+                          </tbody>
+                        ))}
+                      </>
+                    </Table>
+                    <Navigation total={total}>
+                      <Button type="button" onClick={prevPage}>
+                        Voltar
+                      </Button>
+                      <Button type="button" onClick={nextPage}>
+                        Próximo
+                      </Button>
+                    </Navigation>
                   </>
                 )}
-              </div>
+              </>
             ) : (
               <Empty>
                 <strong>Você não possuí nenhuma entregador cadastrado!</strong>
               </Empty>
             )}
-          </>
+          </div>
         )}
         <Loading>
           <ClapSpinner
