@@ -13,6 +13,10 @@
 </p>
 
 <p align="center">
+  <img src=".github/fastfeet.gif" alt="gif" />
+</p>
+
+<p align="center">
   <a href="https://insomnia.rest/run/?label=FastFeet&uri=https%3A%2F%2Fraw.githubusercontent.com%2Fmesquini%2Ffastfeet%2Fmaster%2Ffastfeet.json" target="_blank">
     <img src="https://insomnia.rest/images/run.svg" alt="Run in Insomnia">
   </a>
