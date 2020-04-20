@@ -5,7 +5,8 @@
 
 <strong>The application under development is an app for a fictional shipping company, FastFeet</strong><br />
 
-<p>This challenge is part of the Final Challenge, which is a complete application (Back-end, Front-end and Mobile) of [Bootcamp GoStack 10](https://rocketseat.com.br/bootcamp)</p>
+<p>This challenge is part of the Final Challenge, which is a complete application (Back-end, Front-end and Mobile) of 
+ <a href="https://rocketseat.com.br/bootcamp" target="_blank">GoStack10</a> </p>
 
 <p align="center">
   <a href="#rocket-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
